@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasteland Survivor ID</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050404; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #d6cfc7;
+            font-family: 'Courier New', Courier, monospace; 
+            overflow: hidden; 
+        }
+
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050404;
+            color: #d49900;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; 
+            animation: fadeOut 0.5s ease 2s forwards; 
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #d49900;
+            width: 0;
+            animation: typing 1.5s steps(30, end) forwards, blink-caret 0.5s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 260px } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #d49900 } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none; 
+            animation: scrollLines 10s linear infinite;
+        }
+        @keyframes scrollLines { 0% { background-position: 0 0; } 100% { background-position: 0 100vh; } }
+
+        .card {
+            width: 90%;
+            max-width: 360px;
+            background: linear-gradient(180deg, #2a2622 0%, #171512 100%), 
+                        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px);
+            border: 2px solid #3d342b;
+            border-radius: 8px;
+            padding: 30px 25px 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hazard-tape-top, .hazard-tape-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: repeating-linear-gradient(45deg, #d49900, #d49900 10px, #1a1a1a 10px, #1a1a1a 20px);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+        }
+        .hazard-tape-top { top: 0; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+        .hazard-tape-bottom { bottom: 0; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+
+        .subtitle {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #ff4400;
+            margin-top: 15px;
+            margin-bottom: 60px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 68, 0, 0.5);
+            animation: glitch 4s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 96%, 98%, 100% { opacity: 1; transform: translateX(0); }
+            97% { opacity: 0.8; transform: translateX(-2px); color: #fff; }
+            99% { opacity: 0.5; transform: translateX(2px); color: #d49900; }
+        }
+
+        .profile-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            animation: float 4s ease-in-out infinite; 
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+
+
+        @keyframes rotateBg { 100% { transform: rotate(360deg); } }
+
+        .profile-img {
+            position: absolute;
+            bottom: -5px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 125%; 
+            height: auto;
+            max-height: 250px; 
+            z-index: 10;
+            filter: drop-shadow(0 -8px 15px rgba(0, 0, 0, 0.9)); 
+        }
+
+        .name {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 34px;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+            color: #e6dac3;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0px #111, 0 0 10px rgba(230, 218, 195, 0.2);
+        }
+
+        /* 調整了 grid 排版 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 3px solid #d49900;
+            border-radius: 6px;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+            transition: all 0.3s ease;
+        }
+
+        /* 🆕 讓第三個方塊(生日)橫跨兩格，保持對稱 */
+        .info-card.full-width {
+            grid-column: span 2;
+        }
+
+        .info-card:hover {
+            border-top-color: #ff4400;
+            background: rgba(212, 153, 0, 0.1);
+            box-shadow: inset 0 0 15px rgba(212, 153, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .label {
+            font-size: 11px;
+            color: #7a6e60;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .value {
+            font-size: 14px;
+            color: #d49900;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(212, 153, 0, 0.4);
+            text-align: center;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #3d342b;
+            transition: all 0.2s;
+        }
+
+        .icons a:hover {
+            background: rgba(212, 153, 0, 0.2);
+            border-color: #d49900;
+            transform: scale(1.1);
+        }
+
+        .icons img {
+            width: 20px;
+            height: 20px;
+            filter: invert(50%) sepia(80%) saturate(2000%) hue-rotate(10deg) brightness(90%) contrast(90%);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="boot-screen">
+        <div class="typing-text">> ACCESSING SECURE DATA...</div>
+    </div>
+
+    <div class="scanlines"></div>
+
+    <div class="card">
+        <div class="hazard-tape-top"></div>
+
+        <div class="subtitle">THE MIST AGREEMENT</div>
+        
+        <div class="profile-wrapper">
+            <div class="profile-circle"></div>
+            <img src="/Image/christine.png" class="profile-img" alt="Survivor Profile">
+        </div>
+        
+        <div class="name">黃怡菱</div>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="label">GENDER:</span>
+                <span class="value">FEMALE</span>
+            </div>
+            <div class="info-card">
+                <span class="label">FACULTY:</span>
+                <span class="value">FBF</span>
+            </div>
+            <div class="info-card full-width">
+                <span class="label">BIRTHDAY:</span>
+                <span class="value">200X / XX / XX</span> 
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="icons">
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/3389/3389081.png" alt="Book"></a>
+                
+                <a href="https://www.instagram.com/christine_hyl?igsh=MTJ3OHk4dDJnYTF0bQ==/" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="IG">
+                </a>
+            </div>
+        </div>
+        <div class="hazard-tape-bottom"></div>
+    </div>
+
+</body>
+</html>
