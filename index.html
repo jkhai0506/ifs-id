@@ -111,10 +111,6 @@
             50% { transform: translateY(-8px); }
         }
 
-
-
-        @keyframes rotateBg { 100% { transform: rotate(360deg); } }
-
         .profile-img {
             position: absolute;
             bottom: -5px; 
@@ -127,17 +123,33 @@
             filter: drop-shadow(0 -8px 15px rgba(0, 0, 0, 0.9)); 
         }
 
+        /* --- 更新後的 NAME 樣式 (選項 2) --- */
         .name {
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            font-size: 34px;
-            letter-spacing: 4px;
+            font-family: 'Lucida Console', Monaco, monospace;
+            font-size: 26px;
+            letter-spacing: 2px;
             margin-bottom: 25px;
-            color: #e6dac3;
+            color: #fff; 
             text-transform: uppercase;
-            text-shadow: 3px 3px 0px #111, 0 0 10px rgba(230, 218, 195, 0.2);
+            text-shadow: 
+                0 0 5px #fff, 
+                0 0 10px #d49900, 
+                0 0 15px #d49900; 
+            animation: flicker 3s infinite;
         }
 
-        /* 調整了 grid 排版 */
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+                text-shadow: 0 0 5px #fff, 0 0 10px #d49900, 0 0 15px #d49900;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.4;
+                text-shadow: none;
+            }
+        }
+        /* ---------------------------------- */
+
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -158,7 +170,6 @@
             transition: all 0.3s ease;
         }
 
-        /* 🆕 讓第三個方塊(生日)橫跨兩格，保持對稱 */
         .info-card.full-width {
             grid-column: span 2;
         }
@@ -241,12 +252,12 @@
             <img src="image/christine.png" class="profile-img" alt="Survivor Profile">
         </div>
         
-        <div class="name">黃怡菱</div>
+        <div class="name">Christine <br> Bong Yi Lin</div>
         
         <div class="info-grid">
             <div class="info-card">
-                <span class="label">GENDER:</span>
-                <span class="value">FEMALE</span>
+                <span class="label">MBTI:</span>
+                <span class="value">ESFP</span>
             </div>
             <div class="info-card">
                 <span class="label">FACULTY:</span>
@@ -254,7 +265,7 @@
             </div>
             <div class="info-card full-width">
                 <span class="label">BIRTHDAY:</span>
-                <span class="value">200X / XX / XX</span> 
+                <span class="value">2005 / 07 / 27</span> 
             </div>
         </div>
         
@@ -272,6 +283,7 @@
 
 </body>
 </html>
+
 
 
 
