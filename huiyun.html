@@ -41,36 +41,45 @@
 
         /* --- 第二層：職位解碼畫面 --- */
         #position-discovery {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #050404;
-            color: #ff4400;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            opacity: 0;
-            visibility: hidden;
-            animation: 
-                fadeInOut 2.5s ease 2.5s forwards,
-                screenShake 0.1s infinite 2.5s; 
-            font-family: 'Oswald', sans-serif;
-            font-size: 24px;
-            letter-spacing: 6px;
-            font-weight: 900;
-        }
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; /* 確保寬度佔滿 */
+    height: 100vh;
+    background-color: #050404;
+    color: #ff4400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    animation: 
+        fadeInOut 2.5s ease 2.5s forwards,
+        screenShake 0.1s infinite 2.5s; 
+    font-family: 'Oswald', sans-serif;
+    
+    /* --- 修改這裡：讓字體大小根據螢幕寬度自適應 --- */
+    font-size: clamp(16px, 5vw, 24px); 
+    letter-spacing: 4px;
+    font-weight: 900;
+}
 
-        .position-box {
-            position: relative;
-            border: 4px double #ff4400;
-            padding: 30px 50px;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(255, 68, 0, 0.4), inset 0 0 20px rgba(255, 68, 0, 0.2);
-            background: rgba(255, 68, 0, 0.05);
-            backdrop-filter: blur(5px);
-            overflow: hidden;
-            white-space: nowrap;
-        }
+.position-box {
+    position: relative;
+    border: 4px double #ff4400;
+    padding: 20px 30px; /* 稍微縮減 padding 防止擠壓 */
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 68, 0, 0.4), inset 0 0 20px rgba(255, 68, 0, 0.2);
+    background: rgba(255, 68, 0, 0.05);
+    backdrop-filter: blur(5px);
+    
+    /* 保持這個 */
+    white-space: nowrap; 
+    
+    /* --- 新增這兩行：確保在超小螢幕也不會溢出 --- */
+    max-width: 90vw;
+    overflow: hidden;
+}
 
         .position-box::after {
             content: "";
