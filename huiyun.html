@@ -19,11 +19,9 @@
             color: #d6cfc7;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
-            /* 為了 3D 效果新增透視點 */
             perspective: 1200px;
         }
 
-        /* --- 第一層：原始開機畫面 --- */
         #boot-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -39,47 +37,41 @@
             font-size: 14px;
         }
 
-        /* --- 第二層：職位解碼畫面 --- */
+        /* --- 修改後的職位解碼畫面 --- */
         #position-discovery {
-    position: fixed;
-    top: 0; left: 0; 
-    width: 100vw; /* 確保寬度佔滿 */
-    height: 100vh;
-    background-color: #050404;
-    color: #ff4400;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9998;
-    opacity: 0;
-    visibility: hidden;
-    animation: 
-        fadeInOut 2.5s ease 2.5s forwards,
-        screenShake 0.1s infinite 2.5s; 
-    font-family: 'Oswald', sans-serif;
-    
-    /* --- 修改這裡：讓字體大小根據螢幕寬度自適應 --- */
-    font-size: clamp(16px, 5vw, 24px); 
-    letter-spacing: 4px;
-    font-weight: 900;
-}
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050404;
+            color: #ff4400;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            animation: 
+                fadeInOut 2.5s ease 2.5s forwards,
+                screenShake 0.1s infinite 2.5s; 
+            font-family: 'Oswald', sans-serif;
+            /* 使用 clamp 讓字體在手機上自動縮小，避免溢出 */
+            font-size: clamp(16px, 4.8vw, 24px); 
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
 
-.position-box {
-    position: relative;
-    border: 4px double #ff4400;
-    padding: 20px 30px; /* 稍微縮減 padding 防止擠壓 */
-    text-align: center;
-    box-shadow: 0 0 50px rgba(255, 68, 0, 0.4), inset 0 0 20px rgba(255, 68, 0, 0.2);
-    background: rgba(255, 68, 0, 0.05);
-    backdrop-filter: blur(5px);
-    
-    /* 保持這個 */
-    white-space: nowrap; 
-    
-    /* --- 新增這兩行：確保在超小螢幕也不會溢出 --- */
-    max-width: 90vw;
-    overflow: hidden;
-}
+        .position-box {
+            position: relative;
+            border: 4px double #ff4400;
+            padding: 20px 30px; /* 稍微縮減 padding */
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 68, 0, 0.4), inset 0 0 20px rgba(255, 68, 0, 0.2);
+            background: rgba(255, 68, 0, 0.05);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            white-space: nowrap; /* 確保括號不換行 */
+            max-width: 90vw; /* 確保外框不超出螢幕 */
+            box-sizing: border-box;
+        }
 
         .position-box::after {
             content: "";
@@ -89,7 +81,7 @@
             animation: radarScan 0.6s linear infinite;
         }
 
-        /* --- 第三層：[新增] 3D 頭像展示階段 (5.0s - 9.5s) --- */
+        /* --- 第三層：3D 頭像展示階段 --- */
         #target-zoom {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -100,7 +92,6 @@
             z-index: 9997;
             opacity: 0;
             visibility: hidden;
-            /* 4.5秒展示時長，從第5秒開始 */
             animation: zoomPhase3D 4.5s cubic-bezier(0.4, 0, 0.2, 1) 5s forwards; 
             transform-style: preserve-3d;
         }
@@ -145,7 +136,6 @@
             transform: translateZ(100px);
         }
 
-        /* --- 基礎動畫與掃描線 --- */
         .typing-text {
             overflow: hidden;
             white-space: nowrap;
@@ -165,7 +155,6 @@
             100% { opacity: 0; visibility: hidden; transform: scale(0.9) rotate(1deg); filter: blur(15px) hue-rotate(45deg); }
         }
 
-        /* 3D 延長版動畫定義 */
         @keyframes zoomPhase3D {
             0% { opacity: 0; visibility: visible; transform: translateZ(-1500px) rotateX(20deg) scale(0.1); filter: blur(20px); }
             15% { opacity: 1; transform: translateZ(-300px) rotateX(10deg) scale(0.8); filter: blur(0px); }
@@ -202,7 +191,6 @@
         }
         @keyframes scrollLines { 0% { background-position: 0 0; } 100% { background-position: 0 100vh; } }
 
-        /* --- 卡片主體 (延遲時間已根據第三階段調整) --- */
         .card {
             width: 90%;
             max-width: 380px; 
@@ -216,7 +204,6 @@
             position: relative;
             z-index: 10;
             opacity: 0;
-            /* 調整為 9.5s 開始出現，接在 3D 動畫之後 */
             animation: cardAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1) 9.5s forwards; 
         }
 
@@ -305,7 +292,7 @@
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 150%;
+            width: 100%;
             height: auto;
             max-height: 260px;
             z-index: 10;
@@ -375,7 +362,7 @@
     <div id="position-discovery">
         <div class="position-box">
             <div style="font-family: 'Courier New', monospace; font-size: 11px; color: #8c8173; margin-bottom: 8px; letter-spacing: 2px;">CREDENTIALS VERIFIED</div>
-            [POSITION: PUBLICITY ASSISTANT ]
+            [POSITION: PUBLICITY ASSISTANT]
         </div>
     </div>
 
